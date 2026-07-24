@@ -56,7 +56,7 @@ Scenario Outline: Validate the flight search functionality
       | Travel type |
       | Economy     |
       
-  Scenario Outline: Validate the flights booking workflow End to End 
+      Scenario Outline: Validate the flights booking workflow End to End 
    Given I am on the Home page
   When I click on Login or Signup link
    And I go to the Login page and enter the correct Mobile number and OTP
@@ -72,4 +72,5 @@ Scenario Outline: Validate the flight search functionality
     Examples:
       | Travel type |
       | Economy     |
-     
+ 
+ 

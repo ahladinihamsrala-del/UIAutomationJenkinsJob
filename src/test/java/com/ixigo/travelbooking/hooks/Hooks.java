@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter;
+import com.aventstack.extentreports.markuputils.ExtentColor;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.ixigo.travelbooking.driver.BrowserContext;
 import com.ixigo.travelbooking.driver.DriverFactory;
 import com.ixigo.travelbooking.driver.DriverManager;
@@ -26,8 +28,17 @@ public class Hooks {
 	static PropertyFileReader propreader = new PropertyFileReader();
 
 	@Before(order = 0)
-	public void setUp() {
+	public void setUp(Scenario scenario) {
 		String browser = BrowserContext.getBrowser();
+		if (scenario.getSourceTagNames().contains("@web")) {
+	        ExtentCucumberAdapter.addTestStepLog(
+	            MarkupHelper.createLabel(
+	                "Browser: " + browser.toUpperCase(),
+	                browser.equalsIgnoreCase("chrome") ? ExtentColor.GREEN : ExtentColor.ORANGE
+	            ).getMarkup()
+	        );
+	    }
+	
 		WebDriver driver = DriverFactory.createDriver(browser);
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		DriverManager.setDriver(driver);

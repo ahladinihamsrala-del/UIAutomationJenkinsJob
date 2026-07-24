@@ -26,7 +26,7 @@ public class PassengerInfoPage extends BasePage {
 	public BusPaymentsPage enterPassengerInfo(Map<String, String> busInfo)
 	{
 		elementsUtil.scrollToElement(nameTxt);
-		//elementsUtil.doSendKeys(emailTxt, busInfo.get("Email"));
+		elementsUtil.doSendKeys(emailTxt, busInfo.get("Email"));
 		elementsUtil.doSendKeys(nameTxt, busInfo.get("Name"));
 		elementsUtil.doSendKeys(ageTxt, busInfo.get("Age"));
 		elementsUtil.doClickJSbyElementPresence(maleBtn);

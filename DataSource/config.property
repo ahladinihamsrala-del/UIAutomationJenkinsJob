@@ -3,3 +3,10 @@ ExcelFilePath=./DataSource/TestData.xlsx
 Mobile=8142427742
 gmailusername=testuser123@gmail.com
 gmailpassword=rty677
+
+
+base.url=https://reqres.in
+user.info.file=./DataSource/UserInfo.xlsx
+user.info.sheet=UserInfo
+results.file=./DataSource/Results.xlsx
+results.sheet=Results
