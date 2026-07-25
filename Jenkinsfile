@@ -98,7 +98,7 @@ pipeline {
                 // Runs as a SEPARATE mvn/JVM invocation, after the test JVM (and
                 // ExtentCucumberAdapter's shutdown-hook flush) has fully exited -
                 // guarantees the attached Spark.html is complete, not half-written.
-                bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html test-output/testng-results.xml [Automation Report - Full Run]"'
+                bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html target/surefire-reports/testng-results.xml [Automation Report - Full Run]"'
             }
         }
 
@@ -128,14 +128,14 @@ pipeline {
                 // NOTE: ExtentCucumberAdapter starts a fresh Spark report per JVM run,
                 // so this rerun's report overwrote the full-run's Spark.html at the same
                 // path. This email covers the rerun-only results (see README).
-                bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html test-output/testng-results.xml [Automation Report - Rerun of Failures]"'
+                bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html target/surefire-reports/testng-results.xml [Automation Report - Rerun of Failures]"'
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'test-output/**, target/rerun-*.txt', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'test-output/**, target/rerun-*.txt, target/surefire-reports/**', allowEmptyArchive: true
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,

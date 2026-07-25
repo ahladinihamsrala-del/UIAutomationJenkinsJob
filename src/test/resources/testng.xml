@@ -1,8 +1,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="API Web BDD Grid Suite" preserve-order="true">
-<listeners>
+<!--  <listeners>
     <listener class-name="listeners.RetryListener"/>
-</listeners>
+</listeners>-->
 <test name="API Test Run">
             <classes>
             <class name="api.automation.usermanagement.runner.TestRunnerAPI"/>
