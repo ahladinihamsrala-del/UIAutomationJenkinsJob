@@ -6,6 +6,10 @@ pipeline {
         jdk 'JDK11'
     }
 
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
+
     environment {
         REQRES_API_KEY = credentials('REQRES_API_KEY')
         SELENIUM_GRID_URL = 'http://192.168.4.190:4444/'
@@ -46,7 +50,7 @@ pipeline {
 
         stage('Execute Full Suite') {
             steps {
-                bat "mvn -B test -Dgrid.url=${env.SELENIUM_GRID_URL}"   // let it fail the build for now - we WANT to see red/green clearly in phase 1
+                bat "mvn -B test -Dgrid.url=${env.SELENIUM_GRID_URL}"
             }
         }
     }
