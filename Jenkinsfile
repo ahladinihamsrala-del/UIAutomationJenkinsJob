@@ -1,46 +1,67 @@
 pipeline {
     agent any
+
     tools {
         maven 'Maven3'
+        jdk 'JDK11'
     }
+
+    environment {
+        REQRES_API_KEY = credentials('reqres-api-key')
+        SELENIUM_GRID_URL = 'http://192.168.4.190:4444/'
+    }
+
     stages {
-        stage('Checkout Code') {
+
+        stage('Checkout') {
             steps {
-                echo 'Checking out code from GitHub...'
-                checkout scm
+                git branch: 'main',
+                    url: 'https://github.com/ahladinihamsrala-del/WebAPIAutomation.git',
+                    credentialsId: 'github-credentials'
             }
         }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                bat 'mvn clean compile'
+                sh 'mvn -B clean compile'
             }
         }
-        stage('Run Selenium Tests on Grid') {
+
+        stage('Verify Selenium Grid is Up') {
             steps {
-                echo 'Running Selenium Tests on Grid...'
-                bat 'mvn test -DGRID_URL=http://192.168.4.190:4444/wd/hub'
+                script {
+                    def base = env.SELENIUM_GRID_URL.endsWith('/') ? env.SELENIUM_GRID_URL : env.SELENIUM_GRID_URL + '/'
+                    def statusUrl = "${base}status"
+                    def ready = sh(
+                        script: "curl -s ${statusUrl} | grep -o '\"ready\":true' || true",
+                        returnStdout: true
+                    ).trim()
+                    if (!ready) {
+                        error "Selenium Grid at ${env.SELENIUM_GRID_URL} is not ready. Check the Grid hub/node status before retrying."
+                    }
+                    echo "Selenium Grid is ready at ${env.SELENIUM_GRID_URL}"
+                }
             }
         }
-        stage('Publish Test Reports') {
+
+        stage('Execute Full Suite') {
             steps {
-                echo 'Publishing Test Reports...'
-                junit '**/target/surefire-reports/*.xml'
+                sh 'mvn -B test -Dgrid.url=${SELENIUM_GRID_URL}'   // let it fail the build for now - we WANT to see red/green clearly in phase 1
             }
         }
     }
-   post {
-    always {
-        cucumber buildStatus: 'UNSTABLE',
-                fileIncludePattern: '**/cucumber.json',
-                jsonReportDirectory: 'target/cucumber-reports',
-                reportTitle: 'Cucumber Test Report'
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'test-output/**', allowEmptyArchive: true
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'test-output/SparkReport',
+                reportFiles: 'Spark.html',
+                reportName: 'Extent Spark Report'
+            ])
+        }
     }
-    success {
-        echo '✅ Pipeline completed successfully!'
-    }
-    failure {
-        echo '❌ Pipeline failed! Check the logs above.'
-    }
-}
 }
