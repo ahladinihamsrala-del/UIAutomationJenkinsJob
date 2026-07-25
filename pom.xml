@@ -21,6 +21,7 @@
 <jackson.version>2.18.2</jackson.version>
 <surefire.version>3.3.0</surefire.version>
 <rest-assured.version>5.5.6</rest-assured.version>
+<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
 </properties>
 
 <dependencies>
@@ -98,6 +99,11 @@
         <artifactId>extentreports-cucumber7-adapter</artifactId>
         <version>1.14.0</version>
     </dependency>
+    <dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>jakarta.mail</artifactId>
+    <version>2.0.1</version>
+</dependency>
     
 	</dependencies>
 
@@ -113,15 +119,20 @@
 </plugin>
 
 <plugin>
-<artifactId>maven-surefire-plugin</artifactId>
-<version>${surefire.version}</version>
-<configuration>
-<suiteXmlFiles>
-<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-</suiteXmlFiles>
-
-</configuration>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>${surefire.version}</version>
+    <configuration>
+        <suiteXmlFiles>
+            <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>  <!-- CHANGED: was a literal path -->
+        </suiteXmlFiles>
+    </configuration>
 </plugin>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>3.3.0</version>
+</plugin>
+
 </plugins>
 </build>
 

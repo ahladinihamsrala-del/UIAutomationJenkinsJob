@@ -26,7 +26,8 @@ import io.cucumber.testng.CucumberOptions;
         "pretty",
         "html:target/cucumber-report.html",
         "json:target/cucumber-reports/cucumber.json",
-        "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
+        "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
+        "rerun:target/rerun-ui.txt"
     },
     monochrome = true
 )
