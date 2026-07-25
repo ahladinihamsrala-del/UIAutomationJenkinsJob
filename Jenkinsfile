@@ -32,21 +32,21 @@ pipeline {
                 script {
                     def base = env.SELENIUM_GRID_URL.endsWith('/') ? env.SELENIUM_GRID_URL : env.SELENIUM_GRID_URL + '/'
                     def statusUrl = "${base}status"
-                    def ready = bat(
-                        script: "curl -s ${statusUrl} | grep -o '\"ready\":true' || true",
-                        returnStdout: true
-                    ).trim()
-                    if (!ready) {
-                        error "Selenium Grid at ${env.SELENIUM_GRID_URL} is not ready. Check the Grid hub/node status before retrying."
+                    def result = bat(
+                        script: "curl -sf \"${statusUrl}\" >nul",
+                        returnStatus: true
+                    )
+                    if (result != 0) {
+                        error "Selenium Grid at ${env.SELENIUM_GRID_URL} is not reachable (curl exit code ${result}). Check the Grid hub/node status before retrying."
                     }
-                    echo "Selenium Grid is ready at ${env.SELENIUM_GRID_URL}"
+                    echo "Selenium Grid responded successfully at ${env.SELENIUM_GRID_URL}"
                 }
             }
         }
 
         stage('Execute Full Suite') {
             steps {
-                bat 'mvn -B test -Dgrid.url=${SELENIUM_GRID_URL}'   // let it fail the build for now - we WANT to see red/green clearly in phase 1
+                bat "mvn -B test -Dgrid.url=${env.SELENIUM_GRID_URL}"   // let it fail the build for now - we WANT to see red/green clearly in phase 1
             }
         }
     }
