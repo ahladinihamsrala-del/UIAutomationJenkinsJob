@@ -23,7 +23,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn -B clean compile'
+                bat 'mvn -B clean compile'
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
                 script {
                     def base = env.SELENIUM_GRID_URL.endsWith('/') ? env.SELENIUM_GRID_URL : env.SELENIUM_GRID_URL + '/'
                     def statusUrl = "${base}status"
-                    def ready = sh(
+                    def ready = bat(
                         script: "curl -s ${statusUrl} | grep -o '\"ready\":true' || true",
                         returnStdout: true
                     ).trim()
@@ -46,7 +46,7 @@ pipeline {
 
         stage('Execute Full Suite') {
             steps {
-                sh 'mvn -B test -Dgrid.url=${SELENIUM_GRID_URL}'   // let it fail the build for now - we WANT to see red/green clearly in phase 1
+                bat 'mvn -B test -Dgrid.url=${SELENIUM_GRID_URL}'   // let it fail the build for now - we WANT to see red/green clearly in phase 1
             }
         }
     }
