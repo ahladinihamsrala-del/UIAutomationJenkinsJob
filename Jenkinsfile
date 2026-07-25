@@ -1,3 +1,13 @@
+// PHASE 3: Everything from Phase 2, PLUS email notification (via ReportEmailTrigger)
+// and automatic rerun of failed scenarios (via Cucumber's rerun: mechanism).
+// This is the final, full Jenkinsfile - same content as the top-level Jenkinsfile
+// in this bundle. Once this runs cleanly, replace your repo's Jenkinsfile with this.
+// Windows agent - uses `bat` steps (not `sh`).
+
+// Windows Jenkins agent - uses `bat` steps (not `sh`), and Groovy-side string
+// interpolation (${env.VAR}) rather than shell-native variable syntax, so the
+// same values work whether the agent is bat, sh, or powershell underneath.
+
 pipeline {
     agent any
 
@@ -54,6 +64,12 @@ pipeline {
                 script {
                     def base = env.SELENIUM_GRID_URL.endsWith('/') ? env.SELENIUM_GRID_URL : env.SELENIUM_GRID_URL + '/'
                     def statusUrl = "${base}status"
+                    // curl -f fails (non-zero exit) on any non-2xx response, so this just
+                    // confirms the Grid is reachable and responding - it doesn't parse the
+                    // "ready":true field specifically. That's a reasonable trade-off to avoid
+                    // needing grep/findstr quoting gymnastics across sh vs bat. If you want
+                    // strict node-readiness checking instead of just reachability, say so
+                    // and I'll add a PowerShell-based JSON check.
                     def result = bat(
                         script: "curl -sf \"${statusUrl}\" >nul",
                         returnStatus: true
@@ -82,7 +98,7 @@ pipeline {
                 // Runs as a SEPARATE mvn/JVM invocation, after the test JVM (and
                 // ExtentCucumberAdapter's shutdown-hook flush) has fully exited -
                 // guarantees the attached Spark.html is complete, not half-written.
-                bat 'mvn -q exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html test-output/testng-results.xml [Automation Report - Full Run]"'
+                bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html test-output/testng-results.xml [Automation Report - Full Run]"'
             }
         }
 
@@ -112,7 +128,7 @@ pipeline {
                 // NOTE: ExtentCucumberAdapter starts a fresh Spark report per JVM run,
                 // so this rerun's report overwrote the full-run's Spark.html at the same
                 // path. This email covers the rerun-only results (see README).
-                bat 'mvn -q exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html test-output/testng-results.xml [Automation Report - Rerun of Failures]"'
+                bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html test-output/testng-results.xml [Automation Report - Rerun of Failures]"'
             }
         }
     }
