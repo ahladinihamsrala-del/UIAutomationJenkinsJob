@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        REQRES_API_KEY = credentials('reqres-api-key')
+        REQRES_API_KEY = credentials('REQRES_API_KEY')
         SELENIUM_GRID_URL = 'http://192.168.4.190:4444/'
     }
 
