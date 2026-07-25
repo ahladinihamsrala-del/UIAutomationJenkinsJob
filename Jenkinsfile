@@ -26,7 +26,7 @@ pipeline {
         // Read by EmailUtility.java via System.getenv(...)
         MAIL_FROM     = credentials('automation-mail-from')
         MAIL_PASSWORD = credentials('automation-mail-password')
-        MAIL_TO       = 'ahthati@deloitte.com'
+        MAIL_TO       = 'ahladini.hamsrala@gmail.com'
         SMTP_HOST     = 'smtp.gmail.com'
         SMTP_PORT     = '587'
 
