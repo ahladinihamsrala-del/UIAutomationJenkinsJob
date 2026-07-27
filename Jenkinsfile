@@ -26,7 +26,7 @@ pipeline {
         // Read by EmailUtility.java via System.getenv(...)
         MAIL_FROM     = credentials('automation-mail-from')
         MAIL_PASSWORD = credentials('automation-mail-password')
-        MAIL_TO       = 'ahladini.hamsrala@gmail.com'
+        MAIL_TO       = 'testuser.selenium67@gmail.com'
         SMTP_HOST     = 'smtp.sendgrid.net'
         SMTP_PORT     = '587'
 

@@ -40,7 +40,7 @@ public class EmailUtility {
     private static final String SMTP_USERNAME = "apikey"; // SendGrid's fixed SMTP username - always this literal string
     private static final String FROM_EMAIL = System.getenv("MAIL_FROM");
     private static final String MAIL_PASSWORD = System.getenv("MAIL_PASSWORD");
-    private static final String TO_EMAIL = System.getenv().getOrDefault("MAIL_TO", "ahladini.hamsrala@gmail.com");
+    private static final String TO_EMAIL = System.getenv().getOrDefault("MAIL_TO", "testuser.selenium67@gmail.com");
 
     public static void sendReportEmail(String subject, String bodyHtml, String attachmentPath) {
 
