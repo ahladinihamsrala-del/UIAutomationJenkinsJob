@@ -17,20 +17,30 @@ import java.util.Properties;
 /**
  * Sends an HTML email with the Extent Report (or any file) attached.
  *
- * All sensitive values (from-address, password, recipients) are read from
- * environment variables so nothing sensitive is committed to GitHub.
- * Set these as Jenkins credentials / environment variables:
- *   MAIL_FROM, MAIL_PASSWORD, MAIL_TO, SMTP_HOST, SMTP_PORT
+ * Uses SendGrid's SMTP relay (smtp.sendgrid.net) rather than a personal
+ * Gmail/Outlook account - built for automated/transactional sending, so it
+ * doesn't hit the "suspicious sign-in" friction that personal mail providers
+ * apply to CI/automation traffic.
  *
- * For Gmail, use an "App Password" (not the account password) with 2FA enabled.
+ * All sensitive values are read from environment variables so nothing
+ * sensitive is committed to GitHub. Set these as Jenkins credentials /
+ * environment variables:
+ *   MAIL_FROM     - your verified Sender Identity email (SendGrid Settings > Sender Authentication)
+ *   MAIL_PASSWORD - your SendGrid API key (starts with "SG.") - NOT an account password
+ *   MAIL_TO, SMTP_HOST, SMTP_PORT
+ *
+ * Note: SendGrid's SMTP username is always the literal string "apikey" -
+ * it is NOT your SendGrid account email or MAIL_FROM. Only the password
+ * (the API key itself) is the real secret.
  */
 public class EmailUtility {
 
-    private static final String SMTP_HOST = System.getenv().getOrDefault("SMTP_HOST", "smtp.gmail.com");
+    private static final String SMTP_HOST = System.getenv().getOrDefault("SMTP_HOST", "smtp.sendgrid.net");
     private static final String SMTP_PORT = System.getenv().getOrDefault("SMTP_PORT", "587");
+    private static final String SMTP_USERNAME = "apikey"; // SendGrid's fixed SMTP username - always this literal string
     private static final String FROM_EMAIL = System.getenv("MAIL_FROM");
     private static final String MAIL_PASSWORD = System.getenv("MAIL_PASSWORD");
-    private static final String TO_EMAIL = System.getenv().getOrDefault("MAIL_TO", "ahladini.hamsrala@gmail.com");
+    private static final String TO_EMAIL = System.getenv().getOrDefault("MAIL_TO", "ahthati@deloitte.com");
 
     public static void sendReportEmail(String subject, String bodyHtml, String attachmentPath) {
 
@@ -54,7 +64,7 @@ public class EmailUtility {
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(FROM_EMAIL, MAIL_PASSWORD);
+                return new PasswordAuthentication(SMTP_USERNAME, MAIL_PASSWORD);
             }
         });
 
