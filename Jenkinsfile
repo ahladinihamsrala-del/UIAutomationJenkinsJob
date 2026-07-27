@@ -27,7 +27,7 @@ pipeline {
         MAIL_FROM     = credentials('automation-mail-from')
         MAIL_PASSWORD = credentials('automation-mail-password')
         MAIL_TO       = 'ahladini.hamsrala@gmail.com'
-        SMTP_HOST     = 'smtp.gmail.com'
+        SMTP_HOST     = 'smtp.sendgrid.net'
         SMTP_PORT     = '587'
 
         // API key for the API automation suite (ReqRes) - stored as a Jenkins
