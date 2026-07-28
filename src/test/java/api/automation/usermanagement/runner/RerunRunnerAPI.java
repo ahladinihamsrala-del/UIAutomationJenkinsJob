@@ -8,12 +8,12 @@ import io.cucumber.testng.CucumberOptions;
 /**
  * Re-executes only the API scenarios that FAILED in the previous run.
  *
- * How it works: TestRunnerAPI's plugin list must include "rerun:target/rerun-api.txt"
- * (add this to your existing @CucumberOptions plugin array - see README).
+ * How it works:TestRunnerAPI's plugin list must include "rerun:target/rerun-api.txt"
+ 
  * Cucumber writes the file:line of every failed scenario into that file after
- * each run. The "@" prefix below tells Cucumber to treat the file's contents
+ * each run. 
+ * The "@" prefix below tells Cucumber to treat the file's contents
  * as the list of features/scenarios to run - this is native Cucumber syntax,
- * not custom logic.
  *
  * Triggered from Jenkins only when target/rerun-api.txt is non-empty (see Jenkinsfile).
  */

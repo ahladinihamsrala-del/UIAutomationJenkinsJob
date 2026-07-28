@@ -11,7 +11,7 @@ import com.ixigo.travelbooking.driver.BrowserContext;
 /**
  * Re-executes only the UI/Selenium scenarios that FAILED in the previous run.
  * Mirrors TestRunner.java's glue/browser setup - add "rerun:target/rerun-ui.txt"
- * to TestRunner's plugin list so Cucumber writes failures there (see README).
+ * to TestRunner's plugin list so Cucumber writes failures there.
  *
  * Triggered from Jenkins only when target/rerun-ui.txt is non-empty.
  */

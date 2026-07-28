@@ -19,7 +19,7 @@ private DriverFactory() {
 
 public static WebDriver createDriver(String browser) {
 	
-	String gridUrl=System.getProperty("grid.url"," http://192.168.4.190:4444/");
+	String gridUrl=System.getProperty("grid.url","http://192.168.4.190:4444/");
 
 try {
 switch (browser.toLowerCase()) {

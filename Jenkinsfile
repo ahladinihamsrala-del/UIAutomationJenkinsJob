@@ -1,13 +1,3 @@
-// PHASE 3: Everything from Phase 2, PLUS email notification (via ReportEmailTrigger)
-// and automatic rerun of failed scenarios (via Cucumber's rerun: mechanism).
-// This is the final, full Jenkinsfile - same content as the top-level Jenkinsfile
-// in this bundle. Once this runs cleanly, replace your repo's Jenkinsfile with this.
-// Windows agent - uses `bat` steps (not `sh`).
-
-// Windows Jenkins agent - uses `bat` steps (not `sh`), and Groovy-side string
-// interpolation (${env.VAR}) rather than shell-native variable syntax, so the
-// same values work whether the agent is bat, sh, or powershell underneath.
-
 pipeline {
     agent any
 
@@ -26,19 +16,18 @@ pipeline {
         // Read by EmailUtility.java via System.getenv(...)
         MAIL_FROM     = credentials('automation-mail-from')
         MAIL_PASSWORD = credentials('automation-mail-password')
-        MAIL_TO       = 'testuser.selenium67@gmail.com'
+        MAIL_TO       = 'testuser.selenium67@gmail.com'//mailbox to which mail needs to be triggered
         SMTP_HOST     = 'smtp.sendgrid.net'
         SMTP_PORT     = '587'
 
         // API key for the API automation suite (ReqRes) - stored as a Jenkins
         // "Secret text" credential (create under Manage Jenkins > Credentials).
         // Never printed to console log; credentials() masks it automatically.
-        // Variable name must match exactly what the RestAssured code reads.
+        // Variable name must match exactly what the RestAssured code reads here
         REQRES_API_KEY = credentials('REQRES_API_KEY')
 
-        // Selenium Grid hub URL. Your DriverFactory.java reads this via:
-        //   System.getProperty("grid.url", "http://192.168.4.190:4444/")
-        // That's a JVM system property, not an env var - passed explicitly as
+        // Selenium Grid hub URL.
+        
         // -Dgrid.url=... on the mvn command line in the stages below.
         SELENIUM_GRID_URL = 'http://192.168.4.190:4444/'
     }
@@ -65,11 +54,7 @@ pipeline {
                     def base = env.SELENIUM_GRID_URL.endsWith('/') ? env.SELENIUM_GRID_URL : env.SELENIUM_GRID_URL + '/'
                     def statusUrl = "${base}status"
                     // curl -f fails (non-zero exit) on any non-2xx response, so this just
-                    // confirms the Grid is reachable and responding - it doesn't parse the
-                    // "ready":true field specifically. That's a reasonable trade-off to avoid
-                    // needing grep/findstr quoting gymnastics across sh vs bat. If you want
-                    // strict node-readiness checking instead of just reachability, say so
-                    // and I'll add a PowerShell-based JSON check.
+                    // confirms the Grid is reachable and responding -
                     def result = bat(
                         script: "curl -sf \"${statusUrl}\" >nul",
                         returnStatus: true
@@ -86,7 +71,7 @@ pipeline {
             steps {
                 // catchError lets the pipeline continue past test failures (so email/rerun
                 // stages still run) while still marking this stage's result as FAILURE for
-                // visibility - equivalent to the old `|| true` shell trick, but portable.
+                
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     bat "mvn -B test -Dgrid.url=${env.SELENIUM_GRID_URL}"
                 }
@@ -97,7 +82,7 @@ pipeline {
             steps {
                 // Runs as a SEPARATE mvn/JVM invocation, after the test JVM (and
                 // ExtentCucumberAdapter's shutdown-hook flush) has fully exited -
-                // guarantees the attached Spark.html is complete, not half-written.
+                
                 bat 'mvn exec:java -Dexec.mainClass="utils.ReportEmailTrigger" -Dexec.classpathScope=test -Dexec.args="test-output/SparkReport/Spark.html target/surefire-reports/testng-results.xml [Automation Report - Full Run]"'
             }
         }

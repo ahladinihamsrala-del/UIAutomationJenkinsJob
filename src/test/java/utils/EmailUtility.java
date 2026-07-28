@@ -15,24 +15,17 @@ import java.io.File;
 import java.util.Properties;
 
 /**
- * Sends an HTML email with the Extent Report (or any file) attached.
+ * Sends an HTML email with the Extent Report attached.
  *
- * Uses SendGrid's SMTP relay (smtp.sendgrid.net) rather than a personal
- * Gmail/Outlook account - built for automated/transactional sending, so it
- * doesn't hit the "suspicious sign-in" friction that personal mail providers
- * apply to CI/automation traffic.
+ * Uses SendGrid's SMTP relay (smtp.sendgrid.net) 
  *
- * All sensitive values are read from environment variables so nothing
- * sensitive is committed to GitHub. Set these as Jenkins credentials /
+ * Set these as Jenkins credentials /
  * environment variables:
- *   MAIL_FROM     - your verified Sender Identity email (SendGrid Settings > Sender Authentication)
- *   MAIL_PASSWORD - your SendGrid API key (starts with "SG.") - NOT an account password
+ *   MAIL_FROM     -  verified Sender Identity email (SendGrid Settings > Sender Authentication)
+ *   MAIL_PASSWORD -  SendGrid API key (starts with "SG.") - NOT an account password
  *   MAIL_TO, SMTP_HOST, SMTP_PORT
  *
- * Note: SendGrid's SMTP username is always the literal string "apikey" -
- * it is NOT your SendGrid account email or MAIL_FROM. Only the password
- * (the API key itself) is the real secret.
- */
+ * */
 public class EmailUtility {
 
     private static final String SMTP_HOST = System.getenv().getOrDefault("SMTP_HOST", "smtp.sendgrid.net");

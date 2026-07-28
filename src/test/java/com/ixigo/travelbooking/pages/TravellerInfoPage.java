@@ -41,6 +41,8 @@ public class TravellerInfoPage extends BasePage {
 	
 	public PaymentPage addTravellerInfo(Map<String, String> userInfoRepo)
 	{
+		elementsUtil.doScrollToTop();
+		elementsUtil.scrollToElement(freeCancelOption);
 		elementsUtil.doClickJSbyElementPresence(freeCancelOption);
 		
 		/*elementsUtil.scrollToElement(adult1TitleTxt);
