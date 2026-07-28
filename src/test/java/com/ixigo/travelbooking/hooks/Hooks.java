@@ -53,7 +53,7 @@ public class Hooks {
 		
 
 	}
-	 @AfterStep
+	 @After(order=2)
 	    public void takeScreenshot(Scenario scenario) {
 		 	 
 
@@ -62,7 +62,7 @@ public class Hooks {
 	    }
 	
 
-	@After
+	@After(order=1)
 	public void tearDown() {
 		DriverManager.quitDriver();
 	}
