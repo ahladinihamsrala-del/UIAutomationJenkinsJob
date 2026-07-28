@@ -24,6 +24,8 @@ public class FlightSearchPage extends BasePage {
 	
 	By roundTripButton = By.xpath("//button[normalize-space()='Round Trip']");
 	By fromCity = By.xpath("//span[normalize-space()='From']");
+	By fromCityLabel = By.xpath("//p[normalize-space()='From']");
+	By fromInputBox=By.xpath("//label[normalize-space()='From']/following-sibling::input[1]");
 	By toCity = By.xpath("//span[normalize-space()='To']");
 
 	By fromCityDropdown = By.xpath("(//input[contains(@class,'outline')])[1]");
@@ -63,8 +65,11 @@ public SearchResultsPage flightSearch(Map<String, String> userInfo)
 	
 	
 	elementsUtil.doClickJS(roundTripButton); 
-	elementsUtil.doClick(fromCity); 
-	elementsUtil.doSendKeys(fromCityDropdown, userInfo.get("From location"));
+	//elementsUtil.doClick(fromCity); 
+	elementsUtil.doClick(fromCityLabel); 
+	elementsUtil.doClick(fromInputBox); 
+	elementsUtil.clearAllText(fromInputBox);
+	elementsUtil.doSendKeys(fromInputBox, userInfo.get("From location"));
 	elementsUtil.doClick(searchresultFrom);
 	elementsUtil.doClickJS(toCity);
 	elementsUtil.doSendKeys(toCityDropdown, userInfo.get("To location"));

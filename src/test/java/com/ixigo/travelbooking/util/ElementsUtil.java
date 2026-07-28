@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -159,6 +160,14 @@ public class ElementsUtil {
 	{
 		WebElement element = waitForVisibility(locator);
 		driver.findElement(locator).clear();
+	}
+	
+	public void clearAllText(By locator)
+	{
+		WebElement element = waitForVisibility(locator);
+		element.click();
+		element.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+		element.sendKeys(Keys.BACK_SPACE);
 	}
 }
 
