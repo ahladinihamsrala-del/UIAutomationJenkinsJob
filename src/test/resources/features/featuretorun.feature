@@ -2,7 +2,7 @@ Feature: For demo Purpose
   
       
       
-       Scenario Outline: Validate if the traveller is able to search Busese in a city
+    Scenario Outline: Validate if the traveller is able to search Busese in a city
     Given I am on the Home page
    When I click on Login or Signup link
    And I go to the Login page and enter the correct Mobile number and OTP
