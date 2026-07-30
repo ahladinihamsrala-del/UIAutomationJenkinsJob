@@ -16,6 +16,7 @@ import com.ixigo.travelbooking.driver.DriverFactory;
 import com.ixigo.travelbooking.driver.DriverManager;
 import com.ixigo.travelbooking.util.ElementsUtil;
 import com.ixigo.travelbooking.util.PropertyFileReader;
+import com.ixigo.travelbooking.util.SessionCookieManager;
 
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Scenario;
@@ -45,13 +46,48 @@ public class Hooks {
 	}
 
 	@Before(order = 1)
-	public void launchApplication() throws IOException {
+	public void launchApplication(Scenario scenario) throws IOException {
 		ElementsUtil elementsutil = new ElementsUtil(DriverManager.getDriver());
-		ExtentCucumberAdapter.addTestStepLog(
-                "Starting scenario:Launching URL " + propreader.getFromPropertyFile("url"));
-		elementsutil.openURL(propreader.getFromPropertyFile("url"));
-		
+		String url = propreader.getFromPropertyFile("url");
 
+		ExtentCucumberAdapter.addTestStepLog("Starting scenario:Launching URL " + url);
+		elementsutil.openURL(url);
+
+		if (scenario.getSourceTagNames().contains("@loggedIn")) {
+			try {
+				SessionCookieManager.loadCookies(DriverManager.getDriver(), url);
+
+				boolean sessionValid = elementsutil.isElementVisible(
+						org.openqa.selenium.By.xpath("(//span[text()='Hey'])[1]"), 8
+				);
+
+				if (!sessionValid) {
+					ExtentCucumberAdapter.addTestStepLog(
+							MarkupHelper.createLabel(
+									"SESSION EXPIRED: Saved cookies did not authenticate. "
+									+ "Regenerate session-cookies.ser locally (run SaveSessionCookies) "
+									+ "and re-upload it to the 'ixigo-session-cookies' Jenkins credential.",
+									ExtentColor.RED
+							).getMarkup()
+					);
+					throw new RuntimeException("Session expired - cookies did not authenticate");
+				}
+
+				ExtentCucumberAdapter.addTestStepLog(
+						MarkupHelper.createLabel("Session verified - logged in successfully", ExtentColor.GREEN)
+								.getMarkup()
+				);
+
+			} catch (Exception e) {
+				ExtentCucumberAdapter.addTestStepLog(
+						MarkupHelper.createLabel(
+								"Failed to load/verify session cookies: " + e.getMessage(),
+								ExtentColor.RED
+						).getMarkup()
+				);
+				throw new IOException("Session cookie load/verification failed", e);
+			}
+		}
 	}
 	 @AfterStep
 	    public void takeScreenshot(Scenario scenario) {

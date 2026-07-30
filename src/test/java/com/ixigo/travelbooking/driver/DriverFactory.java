@@ -7,6 +7,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.Dimension;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -32,9 +33,13 @@ public final class DriverFactory {
                     chromeOptions.addArguments("--disable-dev-shm-usage");//req for Jenkins execution
                     chromeOptions.addArguments("--headless=new");//req for Jenkins execution
                     chromeOptions.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+                    chromeOptions.addArguments("--force-device-scale-factor=1");
                 }
                 WebDriverManager.chromedriver().setup();
-                return new ChromeDriver(chromeOptions);
+               ChromeDriver chromeDriver = new ChromeDriver(chromeOptions);
+                
+                chromeDriver.manage().window().setSize(new Dimension(1920, 1080));
+                return chromeDriver;
 
             case "firefox":
                 FirefoxOptions firefoxOptions = new FirefoxOptions();

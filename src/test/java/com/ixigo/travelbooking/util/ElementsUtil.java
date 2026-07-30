@@ -169,6 +169,15 @@ public class ElementsUtil {
 		element.sendKeys(Keys.chord(Keys.CONTROL, "a"));
 		element.sendKeys(Keys.BACK_SPACE);
 	}
+	public boolean isElementVisible(By locator, int timeoutSeconds) {
+	    try {
+	        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+	        shortWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	        return true;
+	    } catch (org.openqa.selenium.TimeoutException e) {
+	        return false;
+	    }
+	}
 }
 
 
