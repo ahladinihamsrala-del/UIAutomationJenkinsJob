@@ -3,3 +3,4 @@ target/
 test-output/ 
 *.class 
 "~$*.xlsx" 
+session-cookies.ser 
