@@ -20,7 +20,7 @@ public class LoginTestSteps {
 	
 	@Given("I am on the Home page")
 	public void i_am_on_the_home_page() throws IOException {
-	//	homePage = new HomePage(DriverManager.getDriver());
+	homePage = new HomePage(DriverManager.getDriver());
 	//Assert.assertTrue(homePage.verifyHomePage().trim().equalsIgnoreCase(prop.getFromPropertyFile("url")),"User not on HomePage");
 	    
 	}
