@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ixigo</groupId>
-  <artifactId>WEBAPI</artifactId>
+  <artifactId>TravelBookingIxigo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -100,9 +100,9 @@
         <version>1.14.0</version>
     </dependency>
     <dependency>
-    <groupId>com.sun.mail</groupId>
-    <artifactId>jakarta.mail</artifactId>
-    <version>2.0.1</version>
+    <groupId>io.github.bonigarcia</groupId>
+    <artifactId>webdrivermanager</artifactId>
+    <version>5.9.2</version>
 </dependency>
     
 	</dependencies>

@@ -1,14 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="API Web BDD Grid Suite" preserve-order="true">
-<!--  <listeners>
-    <listener class-name="listeners.RetryListener"/>
-</listeners>-->
- <test name="API Test Run">
-            <classes>
-            <class name="api.automation.usermanagement.runner.TestRunnerAPI"/>
-        </classes>
-    </test>
-     <test name="Chrome Sequential Run">
+  <test name="Chrome Sequential Run">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="com.ixigo.travelbooking.runner.TestRunner"/>

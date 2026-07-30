@@ -11,9 +11,9 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-       		features = {//"src/test/resources/features/featuretorun.feature",
+       		features = {"src/test/resources/features/featuretorun.feature",
        				//"src/test/resources/features/buses.feature",
-       				"src/test/resources/features/flights.feature",
+       				//"src/test/resources/features/flights.feature",
        				//"src/test/resources/features/hotels.feature",
        				//"src/test/resources/features/login.feature",
        		},
@@ -27,7 +27,7 @@ import io.cucumber.testng.CucumberOptions;
         "html:target/cucumber-report.html",
         "json:target/cucumber-reports/cucumber.json",
         "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
-        "rerun:target/rerun-ui.txt"
+       
     },
     monochrome = true
 )
