@@ -1,7 +1,7 @@
 Feature: User Login workflow
 
 
-  
+  @loggedIn
   Scenario Outline: Validate the login functionality of the travel site
     Given I am on the Home page
    When I click on Login or Signup link
