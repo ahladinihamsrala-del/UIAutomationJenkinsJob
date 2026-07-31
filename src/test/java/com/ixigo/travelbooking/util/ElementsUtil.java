@@ -178,6 +178,22 @@ public class ElementsUtil {
 	        return false;
 	    }
 	}
+	
+	public void safeClick(WebDriver driver, By locator) {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	    WebElement el = wait.until(ExpectedConditions.elementToBeClickable(locator));
+
+	    JavascriptExecutor js = (JavascriptExecutor) driver;
+	    js.executeScript("arguments[0].scrollIntoView({block:'center'});", el);
+
+	    try {
+	        el.click();
+	    } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+	        // fallback to JS click if something is still overlapping
+	        js.executeScript("arguments[0].click();", el);
+	    }
+	}
+	//safeClick(driver, By.xpath("//button[@id='submit']"));
 }
 
 

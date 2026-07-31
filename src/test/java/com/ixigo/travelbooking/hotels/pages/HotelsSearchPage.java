@@ -28,7 +28,7 @@ public class HotelsSearchPage extends BasePage {
 	public HotelsSearchResultsPage searchHotels(Map<String,String>userInfo )
 	
 	{
-		elementsUtil.doClick(hotelsDestinationTxt);
+		elementsUtil.doClickJS(hotelsDestinationTxt);
 		elementsUtil.doSendKeys(hotelsDestinationTxt, userInfo.get("City"));
 		By searchLocation = By.xpath("//p[text()='"+userInfo.get("Location")+"']");
 		elementsUtil.doClickWhenVisible(searchLocation);
@@ -44,7 +44,7 @@ public class HotelsSearchPage extends BasePage {
 		elementsUtil.doClickJS(adultsIncrementIcon);
 		elementsUtil.doClickJS(childincrementIcon);
 		elementsUtil.selectByVisibleText(child1AgeSelector,"8 years");
-		elementsUtil.doClick(searchButton);
+		elementsUtil.doClickJS(searchButton);
 		
 		return new HotelsSearchResultsPage(DriverManager.getDriver());
 		

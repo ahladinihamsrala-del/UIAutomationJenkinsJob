@@ -39,6 +39,8 @@ public final class DriverFactory {
                ChromeDriver chromeDriver = new ChromeDriver(chromeOptions);
                 
                 chromeDriver.manage().window().setSize(new Dimension(1920, 1080));
+                System.out.println("ACTUAL WINDOW SIZE: " + chromeDriver.manage().window().getSize());
+                chromeDriver.manage().window().maximize();
                 return chromeDriver;
 
             case "firefox":

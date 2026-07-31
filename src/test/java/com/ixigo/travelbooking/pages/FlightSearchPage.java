@@ -66,21 +66,21 @@ public SearchResultsPage flightSearch(Map<String, String> userInfo)
 	
 	elementsUtil.doClickJS(roundTripButton); 
 	//elementsUtil.doClick(fromCity); 
-	elementsUtil.doClick(fromCityLabel); 
-	elementsUtil.doClick(fromInputBox); 
+	elementsUtil.doClickJS(fromCityLabel); 
+	elementsUtil.doClickJS(fromInputBox); 
 	elementsUtil.clearAllText(fromInputBox);
 	elementsUtil.doSendKeys(fromInputBox, userInfo.get("From location"));
-	elementsUtil.doClick(searchresultFrom);
+	elementsUtil.doClickJS(searchresultFrom);
 	elementsUtil.doClickJS(toCity);
 	elementsUtil.doSendKeys(toCityDropdown, userInfo.get("To location"));
 	elementsUtil.doClickJS(searchresultTo);
 	
-	elementsUtil.doClick(departureDateField);
-	elementsUtil.doClick(departureDate);
+	elementsUtil.doClickJS(departureDateField);
+	elementsUtil.doClickJS(departureDate);
 	//elementsUtil.doClick(returnDateField);
-	elementsUtil.doClick(returnDate);
+	elementsUtil.doClickJS(returnDate);
 	
-	elementsUtil.doClick(addChildButton);
+	elementsUtil.doClickJS(addChildButton);
 	
 	// Choosing the Travel class
 			if (userInfo.get("Travel Class").equals("Business"))
@@ -89,7 +89,7 @@ public SearchResultsPage flightSearch(Map<String, String> userInfo)
 				elementsUtil.doClick(premiumClassOption);
 	
 	//span[text()='Economy']
-	elementsUtil.doClick(doneButton);
+	elementsUtil.doClickJS(doneButton);
 	elementsUtil.doClickJS(searchFlightsButton);
 	
 	
