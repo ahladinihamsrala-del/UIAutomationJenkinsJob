@@ -26,16 +26,27 @@ pipeline {
     }
 
     post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-            publishHTML(target: [
-                reportDir: 'target',
-                reportFiles: 'cucumber-report.html',
-                reportName: 'Cucumber Report'
-            ])
-        }
-        unstable {
-            echo 'Some tests failed - if failures mention session/cookie loading, the saved session may have expired. Re-run SaveSessionCookies locally and re-upload the Jenkins credential.'
-        }
+    always {
+        junit '**/target/surefire-reports/*.xml'
+
+        publishHTML(target: [
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'target',
+            reportFiles: 'cucumber-report.html',
+            reportName: 'Cucumber Report'
+        ])
+
+        publishHTML(target: [
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'test-output/SparkReport',
+            reportFiles: 'Spark.html',
+            reportName: 'Extent Report'
+        ])
     }
+    ...
+}
 }

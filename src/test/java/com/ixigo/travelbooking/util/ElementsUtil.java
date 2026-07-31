@@ -194,6 +194,17 @@ public class ElementsUtil {
 	    }
 	}
 	//safeClick(driver, By.xpath("//button[@id='submit']"));
+	
+	public void dismissPopupIfPresent(By closeButtonLocator, int timeoutSeconds) {
+	    try {
+	        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+	        WebElement closeBtn = shortWait.until(ExpectedConditions.elementToBeClickable(closeButtonLocator));
+	        closeBtn.click();
+	        System.out.println("Dismissed a promotional popup.");
+	    } catch (org.openqa.selenium.TimeoutException e) {
+	        System.out.println("No popup appeared - continuing.");
+	    }
+	}
 }
 
 

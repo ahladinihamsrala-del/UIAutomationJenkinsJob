@@ -41,6 +41,8 @@ By loginText = By.xpath("(//span[text()='Hey'])[1]");
 By hotelsLink = By.xpath("(//p[text()='Hotels'])[2]");
 By busesLink = By.xpath("(//p[text()='Buses'])[2]");
 
+By popupCloseButton = By.id("closeButton");
+
 
 
 
@@ -98,7 +100,10 @@ public String verifyLoginText()
 
 public HotelsSearchPage navigateToHotelsSearch()
 {
+	
+	
 	elementsUtil.doClickJSbyElementPresence(hotelsLink);
+	elementsUtil.dismissPopupIfPresent(By.id("closeButton"), 3);
 	
 	return new HotelsSearchPage(DriverManager.getDriver());
 
@@ -107,6 +112,7 @@ public HotelsSearchPage navigateToHotelsSearch()
 public BusesSearchPage navigateToBusesSearch()
 {
 	elementsUtil.doClickJSbyElementPresence(busesLink);
+	elementsUtil.dismissPopupIfPresent(By.id("closeButton"), 3);
 	
 	return new BusesSearchPage(DriverManager.getDriver());
 

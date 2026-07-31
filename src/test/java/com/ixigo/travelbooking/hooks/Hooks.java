@@ -52,6 +52,8 @@ public class Hooks {
 
 		ExtentCucumberAdapter.addTestStepLog("Starting scenario:Launching URL " + url);
 		elementsutil.openURL(url);
+		elementsutil.dismissPopupIfPresent(org.openqa.selenium.By.id("closeButton"), 5);
+
 
 		if (scenario.getSourceTagNames().contains("@loggedIn")) {
 			try {
