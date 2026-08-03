@@ -71,8 +71,8 @@ public void loginFromHomePageMobile() throws InterruptedException, IOException
 	
 	elementsUtil.doClickJS(loginContinueButton);
 	Thread.sleep(30000);//explicit delay to enter the OTP 
-	ExtentCucumberAdapter.addTestStepLog(
-            "Login successful now navigating to ixigo page ");
+	//ExtentCucumberAdapter.addTestStepLog(
+          //  "Login successful now navigating to ixigo page ");
 	//elementsUtil.pageRefresh();
 }
 

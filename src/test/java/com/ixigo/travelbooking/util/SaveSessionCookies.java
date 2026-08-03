@@ -1,6 +1,6 @@
 package com.ixigo.travelbooking.util;
 
-import java.util.Properties;
+
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,11 +13,13 @@ public class SaveSessionCookies {
 		
 		ChromeOptions options = new ChromeOptions(); // NOT headless mode — we need to see and interact
 		WebDriver driver = new ChromeDriver(options);
-		Properties prop = new Properties();
-		String siteURL = prop.getProperty("url");
+		PropertyFileReader prop = new PropertyFileReader();
+		String siteURL = prop.getFromPropertyFile("url");
+		System.out.print(siteURL);
 		driver.get(siteURL);
-
+		driver.manage().window().maximize();
 		HomePage homepage = new HomePage(driver);
+		homepage.openSignIn();
 		homepage.loginFromHomePageMobile();
 		System.out.println("=================================================");
 		System.out.println("Log in manually now (enter mobile number + OTP).");
