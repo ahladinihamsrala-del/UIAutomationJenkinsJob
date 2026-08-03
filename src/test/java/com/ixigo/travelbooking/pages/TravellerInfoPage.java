@@ -37,9 +37,12 @@ public class TravellerInfoPage extends BasePage {
 	By skipButton=By.xpath("//button[text()='Skip to Payment']");
 	By childCheckBox=By.xpath("(//input[@type='checkbox'])[2]");
 	By adult1CheckBox=By.xpath("(//input[@type='checkbox'])[1]");
+	
+	//By childCheckBox=By.xpath("//p[text()='Mstr Bhuvik Thati']/preceding::input[@type='checkbox'][1]");
+	//By adult1CheckBox=By.xpath("//p[text()='Mr Joseph Menon']/preceding::input[@type='checkbox'][1]");
 	By emailBox=By.xpath("//label[normalize-space()='Email']/following::input[1]");
 	
-	public PaymentPage addTravellerInfo(Map<String, String> userInfoRepo)
+	public PaymentPage addTravellerInfo(Map<String, String> userInfoRepo) 
 	{
 		elementsUtil.doScrollToTop();
 		elementsUtil.scrollToElement(freeCancelOption);
@@ -51,16 +54,23 @@ public class TravellerInfoPage extends BasePage {
 		elementsUtil.doSendKeys(adult1FirstNameTxt, userInfoRepo.get("First name"));
 		elementsUtil.doSendKeys(adult1LastNameTxt, userInfoRepo.get("Last name"));*/
 		elementsUtil.scrollToElement(adult1CheckBox);
-		//elementsUtil.doClickJSbyElementPresence(adult1CheckBox);
+		elementsUtil.doClickJSbyElementPresence(adult1CheckBox);
 		
-		elementsUtil.doClickWhenVisible(adult1CheckBox);
+		//elementsUtil.doClickWhenVisible(adult1CheckBox);
 		
 		elementsUtil.scrollToElement(childCheckBox);
 		elementsUtil.doClickJSbyElementPresence(childCheckBox);
 		//elementsUtil.scrollToElement(emailBox);
 		//elementsUtil.doSendKeys(emailBox,userInfoRepo.get("Email address"));
+		try {
+		    Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		    Thread.currentThread().interrupt(); // restore interrupt status
+		    throw new RuntimeException(e);      // unchecked, no need to declare
+		}
 		elementsUtil.scrollToElement(continueButton);
 		elementsUtil.doClickJSbyElementPresence(continueButton);
+		//elementsUtil.doClick(continueButton);
 		elementsUtil.doClick(confirmButton);
 		
 		elementsUtil.doClickWhenVisible(skipButton);

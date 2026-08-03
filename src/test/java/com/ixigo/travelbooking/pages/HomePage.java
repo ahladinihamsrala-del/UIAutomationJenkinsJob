@@ -73,7 +73,7 @@ public void loginFromHomePageMobile() throws InterruptedException, IOException
 	Thread.sleep(30000);//explicit delay to enter the OTP 
 	ExtentCucumberAdapter.addTestStepLog(
             "Login successful now navigating to ixigo page ");
-	elementsUtil.pageRefresh();
+	//elementsUtil.pageRefresh();
 }
 
 public void loginFromHomePageGmail() throws InterruptedException, IOException
