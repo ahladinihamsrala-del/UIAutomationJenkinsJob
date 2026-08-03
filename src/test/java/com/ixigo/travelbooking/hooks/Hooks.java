@@ -32,21 +32,9 @@ public class Hooks {
 	@Before(order = 0)
 	public void setUp(Scenario scenario) {
 		String browser = BrowserContext.getBrowser();
-
-		// Cross-check: only run @chrome scenarios during the chrome pass,
-		// and @firefox scenarios during the firefox pass. Scenarios with
-		// neither tag run in every browser pass (no restriction).
-		boolean isChromeOnly = scenario.getSourceTagNames().contains("@chrome");
-		boolean isFirefoxOnly = scenario.getSourceTagNames().contains("@firefox");
-
-		if (isChromeOnly && !browser.equalsIgnoreCase("chrome")) {
-			throw new SkipException("Skipping @chrome-only scenario during " + browser + " run");
-		}
-		if (isFirefoxOnly && !browser.equalsIgnoreCase("firefox")) {
-			throw new SkipException("Skipping @firefox-only scenario during " + browser + " run");
-		}
-
-		if (scenario.getSourceTagNames().contains("@web")) {
+          System.out.println("Browser :"+browser);
+		
+		if (scenario.getSourceTagNames().contains("@loggedIn")) {
 	        ExtentCucumberAdapter.addTestStepLog(
 	            MarkupHelper.createLabel(
 	                "Browser: " + browser.toUpperCase(),
