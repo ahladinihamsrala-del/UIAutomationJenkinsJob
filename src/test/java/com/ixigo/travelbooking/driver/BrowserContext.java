@@ -14,7 +14,8 @@ BROWSER.set(browser);
 public static String getBrowser() {
 String browser = BROWSER.get();
 if (browser == null || browser.isBlank()) {
-return "chrome";
+	 // fallback to system property for single-browser runs
+    browser = System.getProperty("browser", "chrome");
 }
 return browser;
 }

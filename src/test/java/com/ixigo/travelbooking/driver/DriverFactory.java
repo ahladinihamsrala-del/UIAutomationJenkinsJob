@@ -8,6 +8,8 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.Dimension;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -38,9 +40,22 @@ public final class DriverFactory {
                 WebDriverManager.chromedriver().setup();
                ChromeDriver chromeDriver = new ChromeDriver(chromeOptions);
                 
-                chromeDriver.manage().window().setSize(new Dimension(1920,1080));//1920,1080//2560,1440
-                System.out.println("ACTUAL WINDOW SIZE: " + chromeDriver.manage().window().getSize());
-                chromeDriver.manage().window().maximize();
+                //chromeDriver.manage().window().setSize(new Dimension(1920,1080));//1920,1080//2560,1440
+                //System.out.println("ACTUAL WINDOW SIZE: " + chromeDriver.manage().window().getSize());
+             //   chromeDriver.manage().window().maximize();
+                
+
+             // window().setSize() is unreliable for the actual rendering viewport in headless mode.
+             // Use CDP to force the real viewport size directly.
+             Map<String, Object> deviceMetrics = new HashMap<>();
+             deviceMetrics.put("width", 1920);
+             deviceMetrics.put("height", 1080);
+             deviceMetrics.put("deviceScaleFactor", 1);
+             deviceMetrics.put("mobile", false);
+             chromeDriver.executeCdpCommand("Emulation.setDeviceMetricsOverride", deviceMetrics);
+
+           //  chromeDriver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
+             
                 return chromeDriver;
 
             case "firefox":
@@ -51,7 +66,11 @@ public final class DriverFactory {
                     firefoxOptions.addArguments("-headless");
                 }
                 WebDriverManager.firefoxdriver().setup();
-                return new FirefoxDriver(firefoxOptions);
+                FirefoxDriver firefoxDriver = new FirefoxDriver(firefoxOptions);
+
+                // Firefox headless respects --width/--height as the real content
+                // viewport directly (unlike Chrome), so no CDP-style override is needed.
+                return firefoxDriver;
 
             case "edge":
                 EdgeOptions edgeOptions = new EdgeOptions();

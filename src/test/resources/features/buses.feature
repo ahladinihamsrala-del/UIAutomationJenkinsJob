@@ -1,6 +1,6 @@
 Feature: Bus booking  
  
-  @loggedIn
+  @loggedIn @chrome
   Scenario Outline: Validate if the traveller is able to search Busese in a city
     Given I am on the Home page
    When I click on Login or Signup link
@@ -13,7 +13,7 @@ Feature: Bus booking
    Examples:
       | City |
       | Chennai|
-   @loggedIn
+   @loggedIn @chrome
    Scenario Outline: Validate if the Bus search results are returned as per the applied Bus type 
     Given I am on the Home page
    When I click on Login or Signup link
@@ -29,7 +29,7 @@ Feature: Bus booking
    Examples:
       | City |
       | Chennai|
-    @loggedIn     
+    @loggedIn @chrome
     Scenario Outline: E2E Validate if the user is able to navigate till the bus Payment page  
     Given I am on the Home page
    When I click on Login or Signup link

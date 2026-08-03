@@ -3,11 +3,12 @@ package com.ixigo.travelbooking.hooks;
 import java.io.IOException;
 import java.time.Duration;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.testng.SkipException;
 
-import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
@@ -31,6 +32,20 @@ public class Hooks {
 	@Before(order = 0)
 	public void setUp(Scenario scenario) {
 		String browser = BrowserContext.getBrowser();
+
+		// Cross-check: only run @chrome scenarios during the chrome pass,
+		// and @firefox scenarios during the firefox pass. Scenarios with
+		// neither tag run in every browser pass (no restriction).
+		boolean isChromeOnly = scenario.getSourceTagNames().contains("@chrome");
+		boolean isFirefoxOnly = scenario.getSourceTagNames().contains("@firefox");
+
+		if (isChromeOnly && !browser.equalsIgnoreCase("chrome")) {
+			throw new SkipException("Skipping @chrome-only scenario during " + browser + " run");
+		}
+		if (isFirefoxOnly && !browser.equalsIgnoreCase("firefox")) {
+			throw new SkipException("Skipping @firefox-only scenario during " + browser + " run");
+		}
+
 		if (scenario.getSourceTagNames().contains("@web")) {
 	        ExtentCucumberAdapter.addTestStepLog(
 	            MarkupHelper.createLabel(
@@ -39,7 +54,7 @@ public class Hooks {
 	            ).getMarkup()
 	        );
 	    }
-	
+
 		WebDriver driver = DriverFactory.createDriver(browser);
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		DriverManager.setDriver(driver);
@@ -52,15 +67,14 @@ public class Hooks {
 
 		ExtentCucumberAdapter.addTestStepLog("Starting scenario:Launching URL " + url);
 		elementsutil.openURL(url);
-		elementsutil.dismissPopupIfPresent(org.openqa.selenium.By.id("closeButton"), 5);
-
+		elementsutil.dismissPopupIfPresent(By.id("closeButton"), 5);
 
 		if (scenario.getSourceTagNames().contains("@loggedIn")) {
 			try {
 				SessionCookieManager.loadCookies(DriverManager.getDriver(), url);
 
 				boolean sessionValid = elementsutil.isElementVisible(
-						org.openqa.selenium.By.xpath("(//span[text()='Hey'])[1]"), 8
+						By.xpath("(//span[text()='Hey'])[1]"), 8
 				);
 
 				if (!sessionValid) {
@@ -72,7 +86,7 @@ public class Hooks {
 									ExtentColor.RED
 							).getMarkup()
 					);
-					throw new RuntimeException("Session expired - cookies did not authenticate");
+					throw new RuntimeException("SESSION EXPIRED - cookies did not authenticate");
 				}
 
 				ExtentCucumberAdapter.addTestStepLog(
@@ -91,6 +105,7 @@ public class Hooks {
 			}
 		}
 	}
+
 	 @AfterStep
 	    public void takeScreenshot(Scenario scenario) {
 		 	 
@@ -105,4 +120,3 @@ public class Hooks {
 		DriverManager.quitDriver();
 	}
 	}
-

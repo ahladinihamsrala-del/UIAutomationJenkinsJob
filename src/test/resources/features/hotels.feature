@@ -1,6 +1,6 @@
 Feature: Hotel booking  
  
-  @loggedIn
+  @loggedIn @chrome
   Scenario Outline: Validate if the traveller is able to search hotels in a city
     Given I am on the Home page
    When I click on Login or Signup link
@@ -14,7 +14,7 @@ Feature: Hotel booking
       | City |
       | Hyderabad|
       
-    @loggedIn  
+    @loggedIn @chrome 
    Scenario Outline: Validate the sort filters in  search hotel results in a city
    Given I am on the Home page
    When I click on Login or Signup link
@@ -29,7 +29,7 @@ Feature: Hotel booking
       | City |
       | Hyderabad|
       
-     @loggedIn 
+     @loggedIn @chrome 
     Scenario Outline: Validate the Exceptional rating filters in  search hotel results in a city
    Given I am on the Home page
    When I click on Login or Signup link
@@ -44,7 +44,7 @@ Feature: Hotel booking
       | City |
       | Hyderabad|
       
-   @loggedIn   
+   @loggedIn @chrome   
    Scenario Outline: Validate the seach by locality function in search hotel results in a city
    Given I am on the Home page
    When I click on Login or Signup link
@@ -58,7 +58,7 @@ Feature: Hotel booking
    Examples:
       | City |
       | Hyderabad|
-      @loggedIn
+      @loggedIn @chrome
        Scenario Outline: Validate the Facility filters in  search hotel results in a city
    Given I am on the Home page
    When I click on Login or Signup link
@@ -73,7 +73,7 @@ Feature: Hotel booking
    Examples:
       | City |
       | Hyderabad|
-      @loggedIn 
+      @loggedIn @chrome 
        Scenario Outline: Validate the Best price guarantee filter for hotel results 
    Given I am on the Home page
    When I click on Login or Signup link
@@ -88,7 +88,8 @@ Feature: Hotel booking
    Examples:
       | City |
       | Hyderabad|
-      @loggedIn 
+     
+      @loggedIn @chrome 
       Scenario Outline: Validate if the user is able to book Hotel room successfully E2E 
    Given I am on the Home page
    When I click on Login or Signup link

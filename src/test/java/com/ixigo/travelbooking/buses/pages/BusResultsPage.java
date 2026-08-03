@@ -24,7 +24,7 @@ By busfirstSelect= By.xpath("(//button[text()='Select Seats'])[1]");
 
 By boardingPointSearch= By.xpath("//input[@placeholder='Search Boarding Point']");
 By droppingPointSearch= By.xpath("//input[@placeholder='Search Dropping Point']");
-By selectOptions= By.xpath("//div[@class='label']");
+By selectOptions= By.xpath("(//div[@class='label'])[1]");
 By seatAvailable= By.xpath("(//table[@id='seat-layout-details']//button[contains(@class,'seat') and .//span[normalize-space()!='']])[1]");
 By proceedButton= By.xpath("//button[text()='Proceed']");
 
@@ -49,7 +49,7 @@ public PassengerInfoPage bookBus(Map<String, String> busInfo)
 	elementsUtil.doSendKeys(boardingPointSearch, busInfo.get("Boarding point"));
 	//elementsUtil.doClickWhenVisible(selectOptions);
 	elementsUtil.doClickJSbyElementPresence(selectOptions);
-	elementsUtil.doSendKeys(droppingPointSearch, busInfo.get("Dropping point"));
+	//elementsUtil.doSendKeys(droppingPointSearch, busInfo.get("Dropping point"));
 	elementsUtil.doClickJSbyElementPresence(selectOptions);
 	elementsUtil.scrollToElement(seatAvailable);
 	elementsUtil.doClickJS(seatAvailable);

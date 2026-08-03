@@ -1,54 +1,79 @@
 Feature: For demo Purpose  
   
+    
+    Feature: Flight booking workflo
+@loggedIn
+Scenario Outline: Validate the flight search functionality 
+    Given I am on the Home page
+   When I click on Login or Signup link
+   And I go to the Login page and enter the correct Mobile number and OTP
+   Then I am signed in successfully and taken to the search page
+   When I choose Roundtrip and flight details to search for "<Travel type>"
+   Then I go to the flights results page 
+   
+   
+   Examples:
+      | Travel type |
+      | Economy     |
       
-           
-         @loggedIn
-       Scenario Outline: Validate the Facility filters in  search hotel results in a city
+      @loggedIn
+      Scenario Outline: Validate the journey search details are displayed in the header 
+    Given I am on the Home page
+   When I click on Login or Signup link
+   And I go to the Login page and enter the correct Mobile number and OTP
+   Then I am signed in successfully and taken to the search page
+   When I choose Roundtrip and flight details to search for "<Travel type>"
+   Then I go to the flights results page 
+   Then validate the flight search information is displayed in the header for "<Travel type>" passenger
+   
+   Examples:
+      | Travel type |
+      | Economy     |
+    @loggedIn  
+   Scenario Outline: Validate the flights are displayed in the results page as per the Recommendation filter applied 
    Given I am on the Home page
    When I click on Login or Signup link
    And I go to the Login page and enter the correct Mobile number and OTP
    Then I am signed in successfully and taken to the search page
-   When I search for Hotels in "<City>"
-   Then I am navigated to the available hotels list page
-   When I apply the Facility filter for wiFi 
-   Then I can see all the Hotels with the facility
+   When I choose Roundtrip and flight details to search for "<Travel type>"
+   Then I go to the flights results page 
+   When I apply the recommended filter
+   Then all the results are shown as per the filter applied 
    
-   
-   Examples:
-      | City |
-      | Hyderabad|
-      @loggedIn 
-       Scenario Outline: Validate the Best price guarantee filter for hotel results 
-   Given I am on the Home page
+    Examples:
+      | Travel type |
+      | Economy     |
+      
+      @loggedIn
+      Scenario Outline: Validate the flights are displayed in the results page as per the Sort filter applied 
+    Given I am on the Home page
    When I click on Login or Signup link
    And I go to the Login page and enter the correct Mobile number and OTP
    Then I am signed in successfully and taken to the search page
-   When I search for Hotels in "<City>"
-   Then I am navigated to the available hotels list page
-   When I apply the Best price guarantee filter
-   Then I can see all the Hotels with Best Price guarantee card
+   When I choose Roundtrip and flight details to search for "<Travel type>"
+   Then I go to the flights results page 
+   When I apply the sort filter
+   Then all the results are shown as per the filter applied 
    
-   
-   Examples:
-      | City |
-      | Hyderabad|
-      @loggedIn 
-      Scenario Outline: Validate if the user is able to book Hotel room successfully E2E 
+    Examples:
+      | Travel type |
+      | Economy     |
+      @loggedIn
+      Scenario Outline: Validate the flights booking workflow End to End 
    Given I am on the Home page
-   When I click on Login or Signup link
+  When I click on Login or Signup link
    And I go to the Login page and enter the correct Mobile number and OTP
    Then I am signed in successfully and taken to the search page
-   When I search for Hotels in "<City>"
-   Then I am navigated to the available hotels list page
-   When I apply the Best price guarantee filter
-   Then I can see all the Hotels with Best Price guarantee card
-   When I book the best guarantee hotel reserve room
-   And Add User details 
-   Then I am navigated to the payment page 
+   When I choose Roundtrip and flight details to search for "<Travel type>"
+   Then I go to the flights results page 
+   When I choose the cheapest departure and cheapest return and proceed with booking
+   Then I am navigated to the Review and Traveller details page
+   When I verify the flight details and airport details
+   And Add Traveller information contact details and Continue
+   Then I am Navigated to the Payments page
    
-   
-   Examples:
-      | City |
-      |Hyderabad|
-     
-       
+    Examples:
+      | Travel type |
+      | Economy     |
+ 
+    

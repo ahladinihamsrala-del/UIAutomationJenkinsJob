@@ -33,9 +33,9 @@ import io.cucumber.testng.CucumberOptions;
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 
-    @BeforeClass(alwaysRun = true)
-    @Parameters({ "browser" })
-    public void setUpRun(@Optional("chrome") String browser) {
+	@Parameters("browser")
+    @org.testng.annotations.BeforeClass(alwaysRun = true)
+    public void setBrowserFromParam(String browser) {
         BrowserContext.setBrowser(browser);
         
     }
