@@ -1,6 +1,6 @@
 Feature: Flight booking workflo
 
-@loggedIn @chrome @firefox
+@loggedIn @chrome @firefox 
 Scenario Outline: Validate the flight search functionality 
     Given I am on the Home page
    When I click on Login or Signup link
@@ -14,7 +14,7 @@ Scenario Outline: Validate the flight search functionality
       | Travel type |
       | Economy     |
       
-      @loggedIn @chrome @firefox
+      @loggedIn @chrome @firefox 
       Scenario Outline: Validate the journey search details are displayed in the header 
     Given I am on the Home page
    When I click on Login or Signup link
@@ -28,7 +28,7 @@ Scenario Outline: Validate the flight search functionality
       | Travel type |
       | Economy     |
       
-    @loggedIn @chrome @firefox  
+    @loggedIn @chrome  @firefox 
    Scenario Outline: Validate the flights are displayed in the results page as per the Recommendation filter applied 
    Given I am on the Home page
    When I click on Login or Signup link
@@ -43,7 +43,7 @@ Scenario Outline: Validate the flight search functionality
       | Travel type |
       | Economy     |
       
-      @loggedIn @chrome @firefox
+      @loggedIn @chrome @firefox 
       Scenario Outline: Validate the flights are displayed in the results page as per the Sort filter applied 
     Given I am on the Home page
    When I click on Login or Signup link
@@ -58,7 +58,7 @@ Scenario Outline: Validate the flight search functionality
       | Travel type |
       | Economy     |
       
-      @loggedIn @chrome @firefox
+      @loggedIn @chrome @firefox 
       Scenario Outline: Validate the flights booking workflow End to End 
    Given I am on the Home page
   When I click on Login or Signup link
