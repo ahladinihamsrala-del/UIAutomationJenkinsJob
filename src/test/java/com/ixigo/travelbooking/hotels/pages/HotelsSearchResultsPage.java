@@ -112,6 +112,7 @@ public class HotelsSearchResultsPage extends BasePage {
 	public boolean verifyBestPriceGuaranteeFilter() {
 		elementsUtil.scrollToElement(bestPriceToggleSwitch);
 		elementsUtil.doClickJSbyElementPresence(bestPriceToggleSwitch);
+		//elementsUtil.doClickWhenVisible(bestPriceToggleSwitch);
 		elementsUtil.pageRefresh();
 
 		int noOfElements = elementsUtil.getNumberofElementsMatched(BestPriceGuaranteeTag);

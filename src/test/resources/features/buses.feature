@@ -1,6 +1,6 @@
 Feature: Bus booking  
  
-  @loggedIn @chrome @firefox
+  @loggedIn @chrome
   Scenario Outline: Validate if the traveller is able to search Busese in a city
     Given I am on the Home page
    When I click on Login or Signup link

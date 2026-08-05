@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Headless BDD Grid Suite" preserve-order="true">
- <test name="Chrome Sequential Run">
+  <test name="Chrome Sequential Run">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="com.ixigo.travelbooking.runner.TestRunner"/>
