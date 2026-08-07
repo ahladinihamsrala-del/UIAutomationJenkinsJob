@@ -8,7 +8,7 @@ Feature: User Login workflow
    And I go to the Login page and enter the correct Mobile number and OTP
     Then I am signed in successfully and taken to the search page
 
-    
+    #verify merger 
 
   
   
