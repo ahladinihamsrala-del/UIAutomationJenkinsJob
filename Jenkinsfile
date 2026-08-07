@@ -78,7 +78,14 @@ pipeline {
 
         stage('Run Tests - Chrome and Firefox') {
             steps {
-                bat 'mvn -B clean test -Dheadless=true'
+                // -Dmaven.test.failure.ignore=true: without this, Maven returns a non-zero
+                // exit code the moment ANY test fails, which fails this whole stage and
+                // skips every later stage (Calculate Pass %, revert logic, etc.) before they
+                // ever run. The entire point of this pipeline is to keep going after test
+                // failures and decide what to do based on the pass % — so Maven must not
+                // abort the build on its own here. Surefire/TestNG still records failures
+                // in the XML reports normally; only the process exit code is suppressed.
+                bat 'mvn -B clean test -Dheadless=true -Dmaven.test.failure.ignore=true'
             }
             post {
                 always {
@@ -181,8 +188,8 @@ pipeline {
                     writeFile file: 'test-summary.properties', text: """PASS_PERCENT=${env.PASS_PERCENT}
 TOTAL_TESTS=${env.TOTAL_TESTS}
 PASSED_TESTS=${env.PASSED_TESTS}
-FAILED_TESTS=${env.FAILED_TESTS}
 SKIPPED_TESTS=${env.SKIPPED_TESTS}
+FAILED_TESTS=${env.FAILED_TESTS}
 BUILD_REVERTED=${env.BUILD_REVERTED}
 """
                     // OPTION A: feed values into Maven as -D system properties, e.g.:
