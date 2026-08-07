@@ -149,7 +149,8 @@ pipeline {
                         bat """
                             "${env.GIT_EXE}" config user.email "jenkins-ci@yourcompany.com"
                             "${env.GIT_EXE}" config user.name "Jenkins CI"
-                            "${env.GIT_EXE}" checkout ${params.REVERT_BRANCH}
+                            "${env.GIT_EXE}" fetch origin ${params.REVERT_BRANCH}
+                            "${env.GIT_EXE}" checkout -B ${params.REVERT_BRANCH} origin/${params.REVERT_BRANCH}
                             "${env.GIT_EXE}" revert --no-edit HEAD
                         """
 
