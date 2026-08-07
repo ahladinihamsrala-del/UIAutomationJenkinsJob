@@ -9,7 +9,7 @@ Scenario Outline: Validate the flight search functionality
    When I choose Roundtrip and flight details to search for "<Travel type>"
    Then I go to the flights results page 
    
-   
+ #verify revert  
    Examples:
       | Travel type |
       | Economy     |
