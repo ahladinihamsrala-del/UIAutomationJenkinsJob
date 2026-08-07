@@ -83,11 +83,16 @@ pipeline {
             post {
                 always {
                     // Publishes TestNG results to the Jenkins UI (trend graphs, history).
-                    // Requires the "TestNG Results" plugin. Optional — pass % calculation
-                    // below doesn't depend on it.
+                    // Requires the "TestNG Results" plugin. Wrapped in try/catch so a
+                    // missing plugin doesn't fail the whole pipeline — pass % calculation
+                    // below reads the XML directly and doesn't depend on this step.
                     script {
                         if (fileExists(env.TESTNG_RESULTS_FILE)) {
-                            step([$class: 'TestNGPublisher', reportFilenamePattern: env.TESTNG_RESULTS_FILE])
+                            try {
+                                step([$class: 'TestNGPublisher', reportFilenamePattern: env.TESTNG_RESULTS_FILE])
+                            } catch (Exception e) {
+                                echo "TestNG Results plugin not available or failed to publish (non-fatal): ${e.message}"
+                            }
                         } else {
                             echo "No TestNG results file found at ${env.TESTNG_RESULTS_FILE} to publish."
                         }
