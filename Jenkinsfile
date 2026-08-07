@@ -200,23 +200,35 @@ BUILD_REVERTED=${env.BUILD_REVERTED}
         }
     }
 
-    post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-            archiveArtifacts artifacts: 'test-output/SparkReport/**, target/cucumber-report.html, test-summary.properties', allowEmptyArchive: true
+ post {
+    always {
+        script {
+            // Publish JUnit/TestNG XML results (surefire-reports contains JUnit-compatible XML too)
+            if (fileExists('target/surefire-reports')) {
+                junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+            } else {
+                echo "No surefire-reports directory found; skipping junit publish."
+            }
 
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'test-output/SparkReport',
-                reportFiles: 'Spark.html',
-                reportName: 'Extent Report'
-            ])
+            // Archive raw reports for later download/debugging
+            archiveArtifacts artifacts: 'target/surefire-reports/**, test-output/**', allowEmptyArchive: true, fingerprint: true
 
-            echo "Final result -> Pass %: ${env.PASS_PERCENT}, Reverted: ${env.BUILD_REVERTED}"
+            // Publish Extent Spark HTML report
+            if (fileExists('test-output/SparkReport')) {
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'test-output/SparkReport',
+                    reportFiles: 'index.html',
+                    reportName: 'Extent Report'
+                ])
+            } else {
+                echo "No Extent SparkReport directory found; skipping HTML publish."
+            }
         }
     }
+}
 }
 
 /*
