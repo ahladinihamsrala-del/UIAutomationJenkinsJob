@@ -239,17 +239,32 @@ BUILD_REVERTED=${env.BUILD_REVERTED}
 }
 
 /*
- * NonCPS helper: parses the <testng-results total="" passed="" failed="" skipped="">
- * root attributes of TestNG's native XML report. Must be @NonCPS because XmlSlurper
- * is not serializable and can't run inside the pipeline's CPS-transformed steps.
+ * NonCPS helper: parses the total/passed/failed/skipped attributes off the
+ * <testng-results ...> root tag of TestNG's native XML report, using regex
+ * instead of XmlSlurper. XmlSlurper requires manual admin approval under
+ * Jenkins' script-security sandbox (Manage Jenkins -> In-process Script
+ * Approval) and needs re-approval on every edit to this method — regex
+ * avoids that entirely since it's in the default sandbox whitelist.
+ * Must stay @NonCPS since regex Matcher objects aren't CPS-serializable.
  */
 @NonCPS
 def parseTestNGResults(String xmlContent) {
-    def parsed = new XmlSlurper().parseText(xmlContent)
+    def rootMatcher = (xmlContent =~ /<testng-results[^>]*>/)
+    if (!rootMatcher.find()) {
+        throw new Exception("Could not find <testng-results> root element in ${env.TESTNG_RESULTS_FILE}")
+    }
+    String rootTag = rootMatcher.group(0)
+
     return [
-        total  : parsed.@total.text() as Integer,
-        passed : parsed.@passed.text() as Integer,
-        failed : parsed.@failed.text() as Integer,
-        skipped: parsed.@skipped.text() as Integer
+        total  : extractIntAttr(rootTag, 'total'),
+        passed : extractIntAttr(rootTag, 'passed'),
+        failed : extractIntAttr(rootTag, 'failed'),
+        skipped: extractIntAttr(rootTag, 'skipped')
     ]
+}
+
+@NonCPS
+def extractIntAttr(String tag, String attrName) {
+    def m = (tag =~ /${attrName}="(\d+)"/)
+    return m.find() ? m.group(1).toInteger() : 0
 }
