@@ -9,6 +9,7 @@ Feature: Hotel booking
    When I search for Hotels in "<City>"
    Then I am navigated to the available hotels list page
    
+   #To verify the auto push revert
    
    Examples:
       | City |
