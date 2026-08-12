@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import com.ixigo.travelbooking.pages.BasePage;
 
 public class HotelAddCustomerDetailsPage extends BasePage {
-
+//checking revert logic 
 	public HotelAddCustomerDetailsPage(WebDriver driver) {
 		super(driver);
 		
