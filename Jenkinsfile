@@ -6,6 +6,7 @@
  *   1. Capturing % of passing test cases from TestNG's native report
  *   2. Comparing pass % against a configurable threshold
  *   3. Reverting the last commit on the target branch if threshold is not met
+ *      (handles BOTH a normal single-parent commit AND a merge commit at HEAD)
  *   4. Passing pass %/counts/revert status to the build tool via a
  *      properties file (and optionally a downstream job)
  *
@@ -146,13 +147,48 @@ pipeline {
                     if (passPercent < threshold) {
                         echo "Pass % (${passPercent}) is BELOW threshold (${threshold}). Reverting last commit on ${params.REVERT_BRANCH}."
 
+                        // Step 1: sync local branch with the remote before reverting anything.
                         bat """
                             "${env.GIT_EXE}" config user.email "jenkins-ci@yourcompany.com"
                             "${env.GIT_EXE}" config user.name "Jenkins CI"
                             "${env.GIT_EXE}" fetch origin ${params.REVERT_BRANCH}
                             "${env.GIT_EXE}" checkout -B ${params.REVERT_BRANCH} origin/${params.REVERT_BRANCH}
-                            "${env.GIT_EXE}" revert --no-edit HEAD
                         """
+
+                        // Step 2: detect whether HEAD is a merge commit (2+ parents) or a
+                        // normal commit (1 parent), since `git revert` needs different
+                        // handling for each:
+                        //   - Normal commit -> `git revert HEAD` works directly.
+                        //   - Merge commit  -> `git revert HEAD` fails with:
+                        //       "error: commit <sha> is a merge but no -m option was given."
+                        //     because git can't infer which parent is "mainline" to diff
+                        //     against. We must pass `-m 1` to say "treat parent 1 (the
+                        //     branch this merge landed on) as the mainline".
+                        //
+                        // `git rev-parse --verify -q HEAD^2` only succeeds (exit code 0)
+                        // if a second parent exists, i.e. HEAD is a merge commit. We wrap
+                        // it in a small cmd script so the exit code becomes the exit code
+                        // of the whole `bat` step, which `returnStatus: true` then captures
+                        // into a Groovy int instead of failing the build.
+                        int isMergeCommit = bat(
+                            script: """@echo off
+                                "${env.GIT_EXE}" rev-parse --verify -q HEAD^2 >nul 2>&1
+                                exit /b %errorlevel%
+                            """,
+                            returnStatus: true
+                        )
+
+                        // Step 3: build the correct revert command based on the check above.
+                        String revertCommand = (isMergeCommit == 0)
+                            ? "\"${env.GIT_EXE}\" revert --no-edit -m 1 HEAD"
+                            : "\"${env.GIT_EXE}\" revert --no-edit HEAD"
+
+                        echo (isMergeCommit == 0)
+                            ? "HEAD is a merge commit — reverting with -m 1 (relative to mainline parent)."
+                            : "HEAD is a regular commit — reverting directly."
+
+                        // Step 4: run the actual revert.
+                        bat revertCommand
 
                         if (params.AUTO_PUSH_REVERT) {
                             // Injects the GitHub PAT credential so the raw `git push` below can
