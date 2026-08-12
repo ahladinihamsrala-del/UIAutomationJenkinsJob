@@ -9,7 +9,7 @@ import com.ixigo.travelbooking.driver.DriverManager;
 import com.ixigo.travelbooking.pages.BasePage;
 
 public class PassengerInfoPage extends BasePage {
-//checking revert logic
+
 	public PassengerInfoPage(WebDriver driver) {
 		super(driver);
 		
